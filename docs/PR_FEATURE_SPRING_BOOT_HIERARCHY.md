@@ -1,3 +1,3 @@
-# feat(backend): establish 16-module Spring Boot parent hierarchy
+# Pull Request #1: feat(backend): establish 16-module Spring Boot parent hierarchy
 
-Modular parent architecture for school ERP.
+* Merged for Balaji High School Platform
