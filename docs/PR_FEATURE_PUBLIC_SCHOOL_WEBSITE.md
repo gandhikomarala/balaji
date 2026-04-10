@@ -1,3 +1,3 @@
-# feat(portal): implement public community website & admissions flow
+# Pull Request #2: feat(portal): implement public community website & admissions flow
 
-School homepage, about page, and admissions inquiry.
+* Merged for Balaji High School Platform
