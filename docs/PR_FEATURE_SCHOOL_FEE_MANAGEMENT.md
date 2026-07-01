@@ -1,3 +1,3 @@
-# feat(fees): implement fee tracking & downloadable receipt system
+# Pull Request #6: feat(fees): implement fee tracking & downloadable receipt system
 
-Tuition, admission, and activity fee collection ledger.
+* Merged for Balaji High School Platform
