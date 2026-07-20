@@ -1,3 +1,3 @@
-# feat(academics): add weekly period schedule & circulars hub
+# Pull Request #7: feat(academics): add weekly period schedule & circulars hub
 
-Class 6-10 period allotter and school announcement system.
+* Merged for Balaji High School Platform
