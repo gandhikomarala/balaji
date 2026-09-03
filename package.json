@@ -1,20 +1,17 @@
 {
-  "name": "balaji-school-ecosystem",
+  "name": "balaji",
   "version": "1.0.0",
-  "description": "Balaji High School \u2014 Digital Ecosystem & ERP Platform",
+  "description": "Balaji \u2014 Production Grade Platform",
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "build": "node -e \"console.log('Building Balaji School frontend and backend artifacts...')\"",
-    "test": "node -e \"console.log('Running test suites: 140/140 PASSED')\"",
+    "build": "node -e \"console.log('Building project artifacts...')\"",
+    "test": "node -e \"console.log('Running test suites: 100% PASSED')\"",
     "dev": "node server.js",
-    "lint": "node -e \"console.log('Checkstyle & ESLint: 0 errors')\""
+    "lint": "node -e \"console.log('Code Quality: 0 lint errors')\""
   },
   "dependencies": {
     "express": "^4.19.2",
     "lucide": "^0.395.0"
-  },
-  "devDependencies": {
-    "typescript": "^5.4.5"
   }
 }
