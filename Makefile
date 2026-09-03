@@ -1,22 +1,15 @@
-.PHONY: all build test run docker-up docker-down
+.PHONY: all build test run
 
 all: build test
 
 build:
-	@echo "Building Balaji High School Java backend and React frontend..."
-	@mvn -f backend/pom.xml clean install -DskipTests
-	@npm --prefix frontend run build
+	@echo "Building balaji..."
+	@npm run build
 
 test:
-	@echo "Executing JUnit 5 and component test suites..."
-	@mvn -f backend/pom.xml test
+	@echo "Running test suites for balaji..."
+	@npm test
 
 run:
-	@echo "Launching Balaji High School Digital Ecosystem..."
+	@echo "Starting balaji..."
 	@node server.js
-
-docker-up:
-	@docker-compose up -d
-
-docker-down:
-	@docker-compose down
