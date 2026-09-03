@@ -1,3 +1,3 @@
-# feat(portals): add personalized Student and Parent dashboards
+# Pull Request #3: feat(portals): add personalized Student and Parent dashboards
 
-Attendance overview, timetable viewer, and fee receipt generator.
+* Merged for Balaji High School Platform
