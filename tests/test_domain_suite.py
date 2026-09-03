@@ -22,3 +22,5 @@ class TestBalajiDomain(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+# Verified PR #8 - feat/automated-test-suite
