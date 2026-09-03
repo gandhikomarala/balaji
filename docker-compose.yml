@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  school-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:postgresql://school-postgres:5432/balajischool
+      - REDIS_HOST=school-redis
+    depends_on:
+      - school-postgres
+      - school-redis
+
+  school-frontend:
+    image: node:20-alpine
+    working_dir: /app
+    volumes:
+      - ./frontend:/app/frontend
+      - ./server.js:/app/server.js
+    ports:
+      - "3000:3000"
+    command: ["node", "server.js"]
+
+  school-postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: balajischool
+      POSTGRES_USER: balaji_admin
+      POSTGRES_PASSWORD: balaji_secure_dev_password
+    ports:
+      - "5432:5432"
+
+  school-redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"

@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BALAJI HIGH SCHOOL — Digital Ecosystem & ERP Portal</title>
+  <!-- Tailwind CSS & Lucide Icons & Chart.js -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    .glass-nav { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(51, 65, 85, 0.6); }
+    .hero-gradient { background: radial-gradient(circle at 50% 20%, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0) 70%); }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col selection:bg-amber-500 selection:text-slate-950">
+
+  <!-- Top Announcement Bar -->
+  <div class="bg-gradient-to-r from-amber-950 via-slate-900 to-amber-950 border-b border-amber-800/40 px-6 py-2 text-xs flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">ESTD 2007</span>
+      <span class="text-slate-300 font-medium">Balaji High School • Santhamaguluru Block, Prakasam District, AP • Grades VI–X (Telugu Medium)</span>
+    </div>
+    <div class="flex items-center gap-4 text-slate-400 text-[11px]">
+      <span class="flex items-center gap-1.5"><i data-lucide="award" class="w-3.5 h-3.5 text-amber-400"></i> Co-Educational Excellence</span>
+      <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5 text-emerald-400"></i> Academic Year 2026–2027</span>
+    </div>
+  </div>
+
+  <!-- Header Navigation -->
+  <header class="h-16 glass-nav sticky top-0 z-40 px-6 flex items-center justify-between">
+    <div class="flex items-center gap-8">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('public-home')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/20 text-slate-950 font-black text-xl">BHS</div>
+        <div>
+          <span class="font-black tracking-tight text-white text-lg">BALAJI HIGH SCHOOL</span>
+          <span class="text-[10px] font-bold text-amber-400 block tracking-wider uppercase">Santhamaguluru • Estd 2007</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden lg:flex items-center gap-1 border-l border-slate-800 pl-6 text-xs font-semibold">
+        <button onclick="switchTab('public-home')" id="nav-public-home" class="nav-btn px-3 py-2 rounded-lg text-amber-400 bg-slate-800 transition-all">Home</button>
+        <button onclick="switchTab('public-about')" id="nav-public-about" class="nav-btn px-3 py-2 rounded-lg text-slate-400 hover:text-white transition-all">About School</button>
+        <button onclick="switchTab('portal-student')" id="nav-portal-student" class="nav-btn px-3 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1"><i data-lucide="graduation-cap" class="w-4 h-4"></i> Student Portal</button>
+        <button onclick="switchTab('portal-parent')" id="nav-portal-parent" class="nav-btn px-3 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1"><i data-lucide="users" class="w-4 h-4"></i> Parent Portal</button>
+        <button onclick="switchTab('portal-teacher')" id="nav-portal-teacher" class="nav-btn px-3 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1"><i data-lucide="clipboard-check" class="w-4 h-4"></i> Teacher Suite</button>
+        <button onclick="switchTab('portal-admin')" id="nav-portal-admin" class="nav-btn px-3 py-2 rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1"><i data-lucide="shield" class="w-4 h-4"></i> Admin ERP</button>
+      </nav>
+    </div>
+
+    <!-- Role Persona Switcher -->
+    <div class="flex items-center gap-4">
+      <div class="flex items-center bg-slate-900 border border-slate-800 p-1 rounded-xl">
+        <span class="text-[11px] uppercase font-bold text-slate-400 px-2 flex items-center gap-1">
+          <i data-lucide="user" class="w-3.5 h-3.5 text-amber-400"></i> Persona:
+        </span>
+        <select id="roleSelector" onchange="changeRole(this.value)" class="bg-slate-950 border border-slate-800 text-xs text-white rounded-lg px-2.5 py-1 font-semibold focus:outline-none focus:border-amber-500 cursor-pointer">
+          <option value="PUBLIC" selected>Public Visitor</option>
+          <option value="STUDENT">Student (Ravi Kumar - Class IX)</option>
+          <option value="PARENT">Parent (Suresh Kumar - Father)</option>
+          <option value="TEACHER">Teacher (V. Ramaniah - Telugu Lead)</option>
+          <option value="ADMIN">Principal / Admin (K. Balaji)</option>
+        </select>
+      </div>
+
+      <button onclick="openModal('admissionModal')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-lg shadow-amber-500/20 transition-all">
+        <i data-lucide="edit-3" class="w-4 h-4"></i> Admissions Open
+      </button>
+    </div>
+  </header>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Primary Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 space-y-8">
+
+    <!-- ================================================================= -->
+    <!-- VIEW 1: PUBLIC SCHOOL HOME                                        -->
+    <!-- ================================================================= -->
+    <section id="tab-public-home" class="tab-content hero-gradient space-y-12">
+      <!-- Hero Banner -->
+      <div class="text-center max-w-3xl mx-auto space-y-6 pt-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-bold font-mono">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> SANTHAMAGULURU, PRAKASAM DISTRICT
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+          Nurturing Knowledge,<br/><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-400">Building Character</span>, Creating Leaders.
+        </h1>
+        <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
+          Established in 2007, Balaji High School provides holistic rural secondary education for Grades VI to X in Telugu medium, fostering academic excellence, moral discipline, and lifelong confidence.
+        </p>
+        <div class="flex items-center justify-center gap-4 pt-2">
+          <button onclick="switchTab('public-about')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-3 rounded-xl text-sm shadow-xl shadow-amber-500/20 transition-all">
+            Explore Our School →
+          </button>
+          <button onclick="openModal('admissionModal')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all">
+            Admissions 2026–2027
+          </button>
+        </div>
+      </div>
+
+      <!-- School at a Glance Matrix -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-1">
+          <div class="text-3xl font-extrabold text-amber-400 font-mono">2007</div>
+          <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Established Year</div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-1">
+          <div class="text-3xl font-extrabold text-amber-400 font-mono">VI – X</div>
+          <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Secondary Grades</div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-1">
+          <div class="text-3xl font-extrabold text-emerald-400 font-mono">100%</div>
+          <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">SSC Pass Rate</div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 text-center space-y-1">
+          <div class="text-3xl font-extrabold text-cyan-400 font-mono">Telugu</div>
+          <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Instruction Medium</div>
+        </div>
+      </div>
+
+      <!-- Announcements & Upcoming Events -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="megaphone" class="w-5 h-5 text-amber-400"></i> Latest School Notices & Circulars
+          </h3>
+          <div class="space-y-3 font-mono text-xs">
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+              <span class="text-amber-400 font-bold block mb-1">📢 Quarterly Examination Schedule 2026</span>
+              <span class="text-slate-400">Exams commence from Sept 15, 2026 for Grades 6 through 10. Timetable released.</span>
+            </div>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80">
+              <span class="text-emerald-400 font-bold block mb-1">🏆 District Level Science Fair Selection</span>
+              <span class="text-slate-400">Balaji High School students nominated for Prakasam district science models.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+          <h3 class="text-base font-bold text-white flex items-center gap-2">
+            <i data-lucide="calendar" class="w-5 h-5 text-amber-400"></i> Upcoming Events & Functions
+          </h3>
+          <div class="space-y-3 font-mono text-xs">
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 flex items-center justify-between">
+              <div>
+                <span class="text-white font-bold block">Teachers' Day Celebration</span>
+                <span class="text-slate-400">Special cultural assembly by Grade 10 students</span>
+              </div>
+              <span class="px-2 py-1 bg-amber-500/20 text-amber-300 rounded font-bold text-[10px]">SEP 05</span>
+            </div>
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800/80 flex items-center justify-between">
+              <div>
+                <span class="text-white font-bold block">Parent-Teacher Meeting (PTM)</span>
+                <span class="text-slate-400">Quarterly academic review and progress cards</span>
+              </div>
+              <span class="px-2 py-1 bg-emerald-500/20 text-emerald-300 rounded font-bold text-[10px]">SEP 28</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 2: ABOUT SCHOOL                                              -->
+    <!-- ================================================================= -->
+    <section id="tab-public-about" class="tab-content hidden space-y-8">
+      <div class="p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+          <i data-lucide="book-open" class="w-6 h-6 text-amber-400"></i> About Balaji High School
+        </h2>
+        <div class="prose prose-invert max-w-none text-slate-300 text-sm leading-relaxed space-y-4">
+          <p>
+            <strong>Balaji High School</strong> was established in 2007 and is situated in the rural heart of Santhamaguluru Block, Prakasam District, Andhra Pradesh.
+          </p>
+          <p>
+            The institution provides secondary education from Grade VI through Grade X in a supportive co-educational learning environment. Telugu is the medium of instruction, ensuring strong regional language foundations paired with English and modern Sciences.
+          </p>
+          <p>
+            Our vision is to nurture responsible, confident, and capable young individuals who can contribute positively to society, agriculture, technology, and public leadership.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-4 border-t border-slate-800 text-xs font-mono">
+          <div class="p-4 bg-slate-950 rounded-xl">
+            <span class="text-slate-500 uppercase block text-[10px]">Block / District</span>
+            <strong class="text-white text-sm">Santhamaguluru, Prakasam</strong>
+          </div>
+          <div class="p-4 bg-slate-950 rounded-xl">
+            <span class="text-slate-500 uppercase block text-[10px]">Academic Year Start</span>
+            <strong class="text-white text-sm">April Every Year</strong>
+          </div>
+          <div class="p-4 bg-slate-950 rounded-xl">
+            <span class="text-slate-500 uppercase block text-[10px]">Affiliation Standard</span>
+            <strong class="text-white text-sm">SSC Andhra Pradesh State Board</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 3: STUDENT PORTAL                                            -->
+    <!-- ================================================================= -->
+    <section id="tab-portal-student" class="tab-content hidden space-y-6">
+      <div class="p-6 rounded-2xl bg-gradient-to-r from-amber-950/60 to-slate-900 border border-amber-800/40 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-xl font-bold text-white">Ravi Kumar</h2>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">CLASS IX - SEC A</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-1">Roll No: 14 • Admission ID: BHS-2024-0914 • Medium: Telugu</p>
+        </div>
+        <div class="flex items-center gap-6 text-center font-mono text-xs">
+          <div>
+            <span class="text-slate-400 block text-[10px]">Attendance</span>
+            <strong class="text-emerald-400 text-lg">94.2%</strong>
+          </div>
+          <div>
+            <span class="text-slate-400 block text-[10px]">Overall GPA</span>
+            <strong class="text-amber-400 text-lg">A (88.4%)</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Timetable & Marks -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i> Today's Timetable (Class IX-A)
+          </h3>
+          <div class="space-y-2 font-mono text-xs">
+            <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg"><span>09:00 - 09:45</span> <strong class="text-amber-400">Telugu (తెలుగు)</strong> <span>V. Ramaniah</span></div>
+            <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg"><span>09:45 - 10:30</span> <strong class="text-blue-400">English</strong> <span>K. Sreedhar</span></div>
+            <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg"><span>10:45 - 11:30</span> <strong class="text-emerald-400">Mathematics (గణితం)</strong> <span>M. Subba Rao</span></div>
+            <div class="flex justify-between p-2.5 bg-slate-950 rounded-lg"><span>11:30 - 12:15</span> <strong class="text-purple-400">General Science (సైన్స్)</strong> <span>T. Lakshmi</span></div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+          <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <i data-lucide="award" class="w-4 h-4 text-amber-400"></i> Recent Exam Marks (Quarterly)
+          </h3>
+          <table class="w-full text-left font-mono text-xs text-slate-300">
+            <thead class="bg-slate-950 text-slate-400 uppercase text-[10px]">
+              <tr><th class="p-2">Subject</th><th class="p-2">Max</th><th class="p-2">Marks</th><th class="p-2">Grade</th></tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+              <tr><td class="p-2 text-white font-bold">Telugu</td><td class="p-2">100</td><td class="p-2 text-emerald-400 font-bold">92</td><td class="p-2">A1</td></tr>
+              <tr><td class="p-2 text-white font-bold">English</td><td class="p-2">100</td><td class="p-2 text-blue-400 font-bold">84</td><td class="p-2">A2</td></tr>
+              <tr><td class="p-2 text-white font-bold">Mathematics</td><td class="p-2">100</td><td class="p-2 text-emerald-400 font-bold">96</td><td class="p-2">A1</td></tr>
+              <tr><td class="p-2 text-white font-bold">Science</td><td class="p-2">100</td><td class="p-2 text-amber-400 font-bold">88</td><td class="p-2">A2</td></tr>
+              <tr><td class="p-2 text-white font-bold">Social Studies</td><td class="p-2">100</td><td class="p-2 text-emerald-400 font-bold">90</td><td class="p-2">A1</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 4: PARENT PORTAL                                             -->
+    <!-- ================================================================= -->
+    <section id="tab-portal-parent" class="tab-content hidden space-y-6">
+      <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i data-lucide="users" class="w-5 h-5 text-amber-400"></i> Parent Dashboard: Suresh Kumar
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Student: <strong>Ravi Kumar (Class IX-A)</strong> • Primary Contact: Verified</p>
+        </div>
+        <button onclick="downloadFeeReceipt()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20">
+          <i data-lucide="download" class="w-4 h-4"></i> Download Term Fee Receipt
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 text-xs">
+          <h3 class="font-bold text-white uppercase tracking-wider">Fee Payment Summary</h3>
+          <div class="space-y-2 font-mono">
+            <div class="flex justify-between"><span>Annual Tuition Fee:</span> <strong>₹12,000.00</strong></div>
+            <div class="flex justify-between"><span>Amount Paid:</span> <strong class="text-emerald-400">₹12,000.00</strong></div>
+            <div class="flex justify-between"><span>Pending Dues:</span> <strong class="text-slate-400">₹0.00</strong></div>
+            <div class="mt-2 p-2 bg-emerald-950 text-emerald-300 rounded text-center font-bold">FEES FULLY SETTLED</div>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 text-xs">
+          <h3 class="font-bold text-white uppercase tracking-wider">Monthly Attendance Rate</h3>
+          <div class="text-center font-mono py-2">
+            <div class="text-3xl font-extrabold text-emerald-400">94.2%</div>
+            <span class="text-[11px] text-slate-400">162 / 172 Days Present</span>
+          </div>
+          <div class="p-2 bg-slate-950 rounded text-[11px] text-slate-300 text-center font-semibold">Exemplary Attendance</div>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 text-xs">
+          <h3 class="font-bold text-white uppercase tracking-wider">Teacher Communications</h3>
+          <p class="text-slate-400">Class Teacher: V. Ramaniah (Telugu Master)</p>
+          <button onclick="showToast('Message dispatched to Class Teacher!', 'success')" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2 rounded-xl text-xs">
+            Send Note to Class Teacher
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 5: TEACHER SUITE (ATTENDANCE & MARKS ENTRY)                  -->
+    <!-- ================================================================= -->
+    <section id="tab-portal-teacher" class="tab-content hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <i data-lucide="clipboard-check" class="w-5 h-5 text-amber-400"></i> Teacher Attendance & Grading Suite
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Class Teacher: <strong>V. Ramaniah</strong> | Active Class: <strong>Grade IX - Section A</strong></p>
+        </div>
+        <button onclick="saveAttendance()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg shadow-emerald-600/20">
+          <i data-lucide="check" class="w-4 h-4"></i> Submit Today's Attendance
+        </button>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 overflow-x-auto">
+        <table class="w-full text-left text-xs font-mono text-slate-300">
+          <thead class="bg-slate-950 uppercase text-slate-400 text-[10px]">
+            <tr>
+              <th class="p-3">Roll No</th>
+              <th class="p-3">Student Name</th>
+              <th class="p-3">Attendance Status</th>
+              <th class="p-3">Quarterly Marks (Telugu)</th>
+              <th class="p-3">Remarks</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800/60" id="teacherClassTbody">
+            <tr>
+              <td class="p-3 text-amber-400 font-bold">01</td>
+              <td class="p-3 text-white font-bold">Anusha K.</td>
+              <td class="p-3"><select class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-emerald-400 font-bold"><option>Present</option><option>Absent</option></select></td>
+              <td class="p-3"><input type="number" value="88" class="w-16 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-white font-bold" /></td>
+              <td class="p-3 text-slate-400">Good grasping power</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-amber-400 font-bold">02</td>
+              <td class="p-3 text-white font-bold">Lakshmi T.</td>
+              <td class="p-3"><select class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-emerald-400 font-bold"><option>Present</option><option>Absent</option></select></td>
+              <td class="p-3"><input type="number" value="94" class="w-16 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-white font-bold" /></td>
+              <td class="p-3 text-slate-400">Excellent handwriting</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-amber-400 font-bold">14</td>
+              <td class="p-3 text-white font-bold">Ravi Kumar</td>
+              <td class="p-3"><select class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-emerald-400 font-bold"><option selected>Present</option><option>Absent</option></select></td>
+              <td class="p-3"><input type="number" value="92" class="w-16 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-white font-bold" /></td>
+              <td class="p-3 text-slate-400">Consistent performer</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-amber-400 font-bold">15</td>
+              <td class="p-3 text-white font-bold">Suresh P.</td>
+              <td class="p-3"><select class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-emerald-400 font-bold"><option selected>Present</option><option>Absent</option></select></td>
+              <td class="p-3"><input type="number" value="86" class="w-16 bg-slate-950 border border-slate-800 rounded px-2 py-1 text-white font-bold" /></td>
+              <td class="p-3 text-slate-400">Regular and disciplined</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- VIEW 6: ADMIN ERP & SCHOOL MANAGEMENT                             -->
+    <!-- ================================================================= -->
+    <section id="tab-portal-admin" class="tab-content hidden space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+          <i data-lucide="shield" class="w-5 h-5 text-amber-400"></i> School Administration ERP Dashboard
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">Institutional metrics, enrollment records, staff management, and fee collection</p>
+      </div>
+
+      <!-- 4 Admin KPI Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold uppercase">Total Students</span>
+          <div class="text-2xl font-extrabold font-mono text-white mt-2">342</div>
+          <div class="text-[11px] text-emerald-400 mt-1">Grades VI to X Active</div>
+        </div>
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold uppercase">Teaching Faculty</span>
+          <div class="text-2xl font-extrabold font-mono text-white mt-2">18</div>
+          <div class="text-[11px] text-blue-400 mt-1">Subject Specialists</div>
+        </div>
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold uppercase">Today's Attendance</span>
+          <div class="text-2xl font-extrabold font-mono text-emerald-400 mt-2">96.8%</div>
+          <div class="text-[11px] text-slate-400 mt-1">331 / 342 Present</div>
+        </div>
+        <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800">
+          <span class="text-slate-400 text-xs font-semibold uppercase">Fee Recovery Rate</span>
+          <div class="text-2xl font-extrabold font-mono text-amber-400 mt-2">91.4%</div>
+          <div class="text-[11px] text-slate-400 mt-1">Term 1 Completed</div>
+        </div>
+      </div>
+
+      <!-- Analytics Graph -->
+      <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+        <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <i data-lucide="trending-up" class="w-4 h-4 text-amber-400"></i> Grade-Wise Academic Performance (SSC Benchmark)
+        </h3>
+        <div class="h-56 relative">
+          <canvas id="schoolPerformanceChart"></canvas>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: ADMISSION INQUIRY                                              -->
+  <!-- ===================================================================== -->
+  <div id="admissionModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i data-lucide="edit-3" class="w-4 h-4 text-amber-400"></i> Student Admission Application (2026–2027)
+        </h3>
+        <button onclick="closeModal('admissionModal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+
+      <form onsubmit="handleAdmissionSubmit(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Student Full Name *</label>
+          <input type="text" id="admStudentName" required placeholder="e.g. Ramesh Kumar" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Grade Applying For *</label>
+            <select class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500">
+              <option>Grade VI (Class 6)</option>
+              <option>Grade VII (Class 7)</option>
+              <option>Grade VIII (Class 8)</option>
+              <option>Grade IX (Class 9)</option>
+              <option>Grade X (Class 10)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Parent / Guardian Contact *</label>
+            <input type="text" required placeholder="Mobile Number" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-2.5 text-white focus:outline-none focus:border-amber-500" />
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <button type="button" onclick="closeModal('admissionModal')" class="px-4 py-2 rounded-xl text-slate-400 hover:text-white">Cancel</button>
+          <button type="submit" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-5 py-2 rounded-xl shadow-lg shadow-amber-500/20">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function changeRole(role) {
+      if (role === 'STUDENT') switchTab('portal-student');
+      else if (role === 'PARENT') switchTab('portal-parent');
+      else if (role === 'TEACHER') switchTab('portal-teacher');
+      else if (role === 'ADMIN') switchTab('portal-admin');
+      else switchTab('public-home');
+      showToast(`Switched active portal persona to ${role}`, 'info');
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('text-amber-400', 'bg-slate-800');
+        btn.classList.add('text-slate-400');
+      });
+
+      const sec = document.getElementById(`tab-${tab}`);
+      if (sec) sec.classList.remove('hidden');
+
+      const nav = document.getElementById(`nav-${tab}`);
+      if (nav) {
+        nav.classList.remove('text-slate-400');
+        nav.classList.add('text-amber-400', 'bg-slate-800');
+      }
+
+      if (tab === 'portal-admin') updateAdminChart();
+      lucide.createIcons();
+    }
+
+    let adminChart;
+    function updateAdminChart() {
+      const ctx = document.getElementById('schoolPerformanceChart');
+      if (ctx) {
+        if (adminChart) adminChart.destroy();
+        adminChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Class VI', 'Class VII', 'Class VIII', 'Class IX', 'Class X'],
+            datasets: [{
+              label: 'Average Score (%)',
+              data: [86.4, 88.2, 85.0, 89.6, 94.2],
+              backgroundColor: '#f59e0b',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } } },
+              y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } }, max: 100 }
+            }
+          }
+        });
+      }
+    }
+
+    function handleAdmissionSubmit(e) {
+      e.preventDefault();
+      closeModal('admissionModal');
+      showToast('Admission application registered! Application ID: ADM-2026-0814', 'success');
+    }
+
+    function saveAttendance() {
+      showToast("Class IX-A attendance recorded and synced to Parent Portal!", "success");
+    }
+
+    function downloadFeeReceipt() {
+      const receipt = "BALAJI HIGH SCHOOL — FEE RECEIPT\n" +
+        "Receipt No: BHS-REC-2026-9041\n" +
+        "Student: Ravi Kumar (Class IX-A)\n" +
+        "Parent: Suresh Kumar\n" +
+        "Amount Paid: Rs. 12,000.00 (Annual Tuition)\n" +
+        "Payment Mode: Online UPI\n" +
+        "Status: CLEARED & VERIFIED";
+      const link = document.createElement("a");
+      link.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(receipt));
+      link.setAttribute("download", "Balaji_School_Fee_Receipt.txt");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast("Fee receipt downloaded!", "success");
+    }
+
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    function showToast(msg, type = 'info') {
+      const c = document.getElementById('toastContainer');
+      const t = document.createElement('div');
+      const bg = type === 'success' ? 'bg-emerald-950 text-emerald-300 border-emerald-800' : 'bg-slate-900 text-slate-200 border-slate-700';
+      t.className = `p-3.5 px-4 rounded-2xl border ${bg} shadow-2xl text-xs font-semibold flex items-center gap-2 pointer-events-auto transition-all animate-bounce`;
+      t.innerHTML = `<i data-lucide="bell" class="w-4 h-4"></i> <span>${msg}</span>`;
+      c.appendChild(t);
+      lucide.createIcons();
+      setTimeout(() => t.remove(), 3500);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# Environment variables
+.env
+.env.*
+*.env.local
+*.env.production
+
+# Build artifacts
+target/
+dist/
+build/
+node_modules/
+*.log
+.DS_Store
