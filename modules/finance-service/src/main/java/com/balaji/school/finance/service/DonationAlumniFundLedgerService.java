@@ -1,7 +1,7 @@
-package com.balaji.school.student.service;
+package com.balaji.school.finance.service;
 
-import com.balaji.school.student.dto.StudentAdmissionWorkflowRequestDto;
-import com.balaji.school.student.model.StudentAdmissionWorkflowEntity;
+import com.balaji.school.finance.dto.DonationAlumniFundLedgerRequestDto;
+import com.balaji.school.finance.model.DonationAlumniFundLedgerEntity;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -11,22 +11,22 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Service orchestrator for StudentAdmissionWorkflow.
- * Comprehensive student admission, Aadhaar KYC verification, previous school transfer certificate validation, and reservation quota processing.
+ * Service orchestrator for DonationAlumniFundLedger.
+ * Alumni development donations, infrastructure corpus funds, CSR grants, and donor tax exemption receipts.
  */
-public class StudentAdmissionWorkflowService {
+public class DonationAlumniFundLedgerService {
 
-    private static final Logger LOGGER = Logger.getLogger(StudentAdmissionWorkflowService.class.getName());
-    private final Map<String, StudentAdmissionWorkflowEntity> repository = new ConcurrentHashMap<>();
+    private static final Logger LOGGER = Logger.getLogger(DonationAlumniFundLedgerService.class.getName());
+    private final Map<String, DonationAlumniFundLedgerEntity> repository = new ConcurrentHashMap<>();
 
-    public StudentAdmissionWorkflowService() {
+    public DonationAlumniFundLedgerService() {
         initializeDefaultRecords();
     }
 
     private void initializeDefaultRecords() {
         for (int i = 1; i <= 6; i++) {
             String entityId = "BALAJI-" + i;
-            StudentAdmissionWorkflowEntity record = new StudentAdmissionWorkflowEntity(
+            DonationAlumniFundLedgerEntity record = new DonationAlumniFundLedgerEntity(
                 entityId,
                 "REF-2026-" + (2000 + i),
                 "STU-2026-" + (100 + i),
@@ -44,15 +44,15 @@ public class StudentAdmissionWorkflowService {
         }
     }
 
-    public StudentAdmissionWorkflowEntity registerEntry(StudentAdmissionWorkflowRequestDto dto) {
+    public DonationAlumniFundLedgerEntity registerEntry(DonationAlumniFundLedgerRequestDto dto) {
         if (dto == null || !dto.validatePayload()) {
-            LOGGER.log(Level.WARNING, "Rejected invalid registration attempt for StudentAdmissionWorkflow");
-            throw new IllegalArgumentException("Invalid payload provided for StudentAdmissionWorkflow registration");
+            LOGGER.log(Level.WARNING, "Rejected invalid registration attempt for DonationAlumniFundLedger");
+            throw new IllegalArgumentException("Invalid payload provided for DonationAlumniFundLedger registration");
         }
 
-        LOGGER.info("Executing StudentAdmissionWorkflow workflow for student: " + dto.getStudentId());
+        LOGGER.info("Executing DonationAlumniFundLedger workflow for student: " + dto.getStudentId());
 
-        StudentAdmissionWorkflowEntity entity = new StudentAdmissionWorkflowEntity();
+        DonationAlumniFundLedgerEntity entity = new DonationAlumniFundLedgerEntity();
         entity.setStudentId(dto.getStudentId());
         entity.setTeacherId(dto.getTeacherId());
         entity.setAcademicYear(dto.getAcademicYear());
@@ -69,32 +69,32 @@ public class StudentAdmissionWorkflowService {
         return entity;
     }
 
-    public Optional<StudentAdmissionWorkflowEntity> getById(String id) {
+    public Optional<DonationAlumniFundLedgerEntity> getById(String id) {
         if (id == null || id.trim().isEmpty()) {
             return Optional.empty();
         }
         return Optional.ofNullable(repository.get(id));
     }
 
-    public List<StudentAdmissionWorkflowEntity> getAll() {
+    public List<DonationAlumniFundLedgerEntity> getAll() {
         return new ArrayList<>(repository.values());
     }
 
-    public List<StudentAdmissionWorkflowEntity> filterByStudent(String studentId) {
+    public List<DonationAlumniFundLedgerEntity> filterByStudent(String studentId) {
         if (studentId == null) return Collections.emptyList();
         return repository.values().stream()
                 .filter(e -> studentId.equalsIgnoreCase(e.getStudentId()))
                 .collect(Collectors.toList());
     }
 
-    public List<StudentAdmissionWorkflowEntity> filterByTeacher(String teacherId) {
+    public List<DonationAlumniFundLedgerEntity> filterByTeacher(String teacherId) {
         if (teacherId == null) return Collections.emptyList();
         return repository.values().stream()
                 .filter(e -> teacherId.equalsIgnoreCase(e.getTeacherId()))
                 .collect(Collectors.toList());
     }
 
-    public List<StudentAdmissionWorkflowEntity> filterByStatus(String status) {
+    public List<DonationAlumniFundLedgerEntity> filterByStatus(String status) {
         if (status == null) return Collections.emptyList();
         return repository.values().stream()
                 .filter(e -> status.equalsIgnoreCase(e.getStatus()))
@@ -102,7 +102,7 @@ public class StudentAdmissionWorkflowService {
     }
 
     public boolean updateStatus(String id, String newStatus, String operatorNotes) {
-        StudentAdmissionWorkflowEntity entity = repository.get(id);
+        DonationAlumniFundLedgerEntity entity = repository.get(id);
         if (entity != null) {
             entity.setStatus(newStatus);
             entity.setRemarks(operatorNotes + " [Timestamp: " + LocalDateTime.now() + "]");
@@ -119,19 +119,19 @@ public class StudentAdmissionWorkflowService {
     public double computeCumulativeAmount() {
         return repository.values().stream()
                 .filter(e -> e.getMonetaryAmount() != null)
-                .mapToDouble(StudentAdmissionWorkflowEntity::getMonetaryAmount)
+                .mapToDouble(DonationAlumniFundLedgerEntity::getMonetaryAmount)
                 .sum();
     }
 
     public double computeMeanPrimaryScore() {
         return repository.values().stream()
                 .filter(e -> e.getPrimaryScore() != null)
-                .mapToDouble(StudentAdmissionWorkflowEntity::getPrimaryScore)
+                .mapToDouble(DonationAlumniFundLedgerEntity::getPrimaryScore)
                 .average()
                 .orElse(0.0);
     }
 
     public long totalActiveRecords() {
-        return repository.values().stream().filter(StudentAdmissionWorkflowEntity::isActive).count();
+        return repository.values().stream().filter(DonationAlumniFundLedgerEntity::isActive).count();
     }
 }

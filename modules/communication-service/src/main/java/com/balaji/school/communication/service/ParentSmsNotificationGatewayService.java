@@ -1,7 +1,7 @@
-package com.balaji.school.student.service;
+package com.balaji.school.communication.service;
 
-import com.balaji.school.student.dto.StudentAdmissionWorkflowRequestDto;
-import com.balaji.school.student.model.StudentAdmissionWorkflowEntity;
+import com.balaji.school.communication.dto.ParentSmsNotificationGatewayRequestDto;
+import com.balaji.school.communication.model.ParentSmsNotificationGatewayEntity;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -11,22 +11,22 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * Service orchestrator for StudentAdmissionWorkflow.
- * Comprehensive student admission, Aadhaar KYC verification, previous school transfer certificate validation, and reservation quota processing.
+ * Service orchestrator for ParentSmsNotificationGateway.
+ * Multi-lingual Telugu & English transactional SMS delivery, absent student morning alerts, and fee reminder pings.
  */
-public class StudentAdmissionWorkflowService {
+public class ParentSmsNotificationGatewayService {
 
-    private static final Logger LOGGER = Logger.getLogger(StudentAdmissionWorkflowService.class.getName());
-    private final Map<String, StudentAdmissionWorkflowEntity> repository = new ConcurrentHashMap<>();
+    private static final Logger LOGGER = Logger.getLogger(ParentSmsNotificationGatewayService.class.getName());
+    private final Map<String, ParentSmsNotificationGatewayEntity> repository = new ConcurrentHashMap<>();
 
-    public StudentAdmissionWorkflowService() {
+    public ParentSmsNotificationGatewayService() {
         initializeDefaultRecords();
     }
 
     private void initializeDefaultRecords() {
         for (int i = 1; i <= 6; i++) {
             String entityId = "BALAJI-" + i;
-            StudentAdmissionWorkflowEntity record = new StudentAdmissionWorkflowEntity(
+            ParentSmsNotificationGatewayEntity record = new ParentSmsNotificationGatewayEntity(
                 entityId,
                 "REF-2026-" + (2000 + i),
                 "STU-2026-" + (100 + i),
@@ -44,15 +44,15 @@ public class StudentAdmissionWorkflowService {
         }
     }
 
-    public StudentAdmissionWorkflowEntity registerEntry(StudentAdmissionWorkflowRequestDto dto) {
+    public ParentSmsNotificationGatewayEntity registerEntry(ParentSmsNotificationGatewayRequestDto dto) {
         if (dto == null || !dto.validatePayload()) {
-            LOGGER.log(Level.WARNING, "Rejected invalid registration attempt for StudentAdmissionWorkflow");
-            throw new IllegalArgumentException("Invalid payload provided for StudentAdmissionWorkflow registration");
+            LOGGER.log(Level.WARNING, "Rejected invalid registration attempt for ParentSmsNotificationGateway");
+            throw new IllegalArgumentException("Invalid payload provided for ParentSmsNotificationGateway registration");
         }
 
-        LOGGER.info("Executing StudentAdmissionWorkflow workflow for student: " + dto.getStudentId());
+        LOGGER.info("Executing ParentSmsNotificationGateway workflow for student: " + dto.getStudentId());
 
-        StudentAdmissionWorkflowEntity entity = new StudentAdmissionWorkflowEntity();
+        ParentSmsNotificationGatewayEntity entity = new ParentSmsNotificationGatewayEntity();
         entity.setStudentId(dto.getStudentId());
         entity.setTeacherId(dto.getTeacherId());
         entity.setAcademicYear(dto.getAcademicYear());
@@ -69,32 +69,32 @@ public class StudentAdmissionWorkflowService {
         return entity;
     }
 
-    public Optional<StudentAdmissionWorkflowEntity> getById(String id) {
+    public Optional<ParentSmsNotificationGatewayEntity> getById(String id) {
         if (id == null || id.trim().isEmpty()) {
             return Optional.empty();
         }
         return Optional.ofNullable(repository.get(id));
     }
 
-    public List<StudentAdmissionWorkflowEntity> getAll() {
+    public List<ParentSmsNotificationGatewayEntity> getAll() {
         return new ArrayList<>(repository.values());
     }
 
-    public List<StudentAdmissionWorkflowEntity> filterByStudent(String studentId) {
+    public List<ParentSmsNotificationGatewayEntity> filterByStudent(String studentId) {
         if (studentId == null) return Collections.emptyList();
         return repository.values().stream()
                 .filter(e -> studentId.equalsIgnoreCase(e.getStudentId()))
                 .collect(Collectors.toList());
     }
 
-    public List<StudentAdmissionWorkflowEntity> filterByTeacher(String teacherId) {
+    public List<ParentSmsNotificationGatewayEntity> filterByTeacher(String teacherId) {
         if (teacherId == null) return Collections.emptyList();
         return repository.values().stream()
                 .filter(e -> teacherId.equalsIgnoreCase(e.getTeacherId()))
                 .collect(Collectors.toList());
     }
 
-    public List<StudentAdmissionWorkflowEntity> filterByStatus(String status) {
+    public List<ParentSmsNotificationGatewayEntity> filterByStatus(String status) {
         if (status == null) return Collections.emptyList();
         return repository.values().stream()
                 .filter(e -> status.equalsIgnoreCase(e.getStatus()))
@@ -102,7 +102,7 @@ public class StudentAdmissionWorkflowService {
     }
 
     public boolean updateStatus(String id, String newStatus, String operatorNotes) {
-        StudentAdmissionWorkflowEntity entity = repository.get(id);
+        ParentSmsNotificationGatewayEntity entity = repository.get(id);
         if (entity != null) {
             entity.setStatus(newStatus);
             entity.setRemarks(operatorNotes + " [Timestamp: " + LocalDateTime.now() + "]");
@@ -119,19 +119,19 @@ public class StudentAdmissionWorkflowService {
     public double computeCumulativeAmount() {
         return repository.values().stream()
                 .filter(e -> e.getMonetaryAmount() != null)
-                .mapToDouble(StudentAdmissionWorkflowEntity::getMonetaryAmount)
+                .mapToDouble(ParentSmsNotificationGatewayEntity::getMonetaryAmount)
                 .sum();
     }
 
     public double computeMeanPrimaryScore() {
         return repository.values().stream()
                 .filter(e -> e.getPrimaryScore() != null)
-                .mapToDouble(StudentAdmissionWorkflowEntity::getPrimaryScore)
+                .mapToDouble(ParentSmsNotificationGatewayEntity::getPrimaryScore)
                 .average()
                 .orElse(0.0);
     }
 
     public long totalActiveRecords() {
-        return repository.values().stream().filter(StudentAdmissionWorkflowEntity::isActive).count();
+        return repository.values().stream().filter(ParentSmsNotificationGatewayEntity::isActive).count();
     }
 }
