@@ -1,3 +1,3 @@
-# feat(infra): add Docker, Kubernetes manifests, and Prometheus metrics
+# Pull Request #8: feat(infra): add Docker, Kubernetes manifests, and Prometheus metrics
 
-Production containerization and health probes.
+* Merged for Balaji High School Platform
